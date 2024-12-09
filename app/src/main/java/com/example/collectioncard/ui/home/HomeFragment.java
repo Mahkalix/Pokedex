@@ -32,8 +32,6 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
 
-
-
         // Set the root view to match the parent
         ViewGroup.LayoutParams params = root.getLayoutParams();
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -51,8 +49,10 @@ public class HomeFragment extends Fragment {
         Animation blinkAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
         button.startAnimation(blinkAnimation);
 
-        button.setOnClickListener(v -> NavHostFragment.findNavController(HomeFragment.this)
-                .navigate(R.id.navigation_dashboard));
+    button.setOnClickListener(v -> {
+
+    NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.navigation_profile);
+});
 
 
 
