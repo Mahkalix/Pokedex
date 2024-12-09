@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         // Utilisation de View Binding
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -30,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Configurer le BottomNavigationView
         BottomNavigationView navView = binding.navView;
+
+        // Pour afficher les icônes en couleur
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+        bottomNavigationView.setItemIconTintList(null);
 
         // Définir les destinations de niveau supérieur (si nécessaire pour AppBarConfiguration)
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(

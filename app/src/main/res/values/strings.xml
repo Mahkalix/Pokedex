@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">CollectionCard</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">My cards</string>
+    <string name="app_name">Pokédex</string>
+    <string name="title_home">Accueil</string>
+    <string name="title_dashboard">Pokédex</string>
     <string name="title_profile">Profile</string>
     <string name="image_text">Illustration de collection de cartes</string>
     <string name="button_home">Tape ici pour commencer</string>
