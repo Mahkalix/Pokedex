@@ -23,41 +23,38 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // Rendre toute la vue cliquable
+        View rootLayout = binding.rootLayout;;
+        rootLayout.setOnClickListener(v -> {
+            // Action à effectuer lors du clic
+            Log.d(TAG, "La vue entière a été cliquée !");
+            NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.navigation_dashboard);
+        });
 
-        // Set the root view to match the parent
-        ViewGroup.LayoutParams params = root.getLayoutParams();
-        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        root.setLayoutParams(params);
-
+        // Code existant
         final TextView textView = binding.TitleText;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         final TextView subtitleTextView = binding.SubtitleText;
-
         binding.mainImage.setImageResource(com.example.collectioncard.R.drawable.logo);
 
         final Button button = binding.button;
         Animation blinkAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
         button.startAnimation(blinkAnimation);
 
-    button.setOnClickListener(v -> {
-
-    NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.navigation_profile);
-});
-
-
+        // Supprime le setOnClickListener du bouton si tout est cliquable
+        button.setOnClickListener(null);
 
         return root;
     }
+
 
     @Override
     public void onDestroyView() {
