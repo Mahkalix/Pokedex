@@ -2,6 +2,7 @@ package com.example.collectioncard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder> {
 
+    private static final String TAG = "TZG";
     private final List<Pokemon> pokemonList;
     private final Context context; // Ajout du contexte pour gérer l'Intent
 
@@ -56,6 +58,9 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
             // Ajouter des données au Pokémon (nom et numéro)
             intent.putExtra("pokemon_name", pokemon.getName());
             intent.putExtra("pokemon_number", pokemon.getNumber());
+
+            Log.d(TAG, "Sending Pokémon Name: " + pokemon.getName());
+            Log.d(TAG, "Sending Pokémon Number: " + pokemon.getNumber());
 
 
             // Lancer l'activité
