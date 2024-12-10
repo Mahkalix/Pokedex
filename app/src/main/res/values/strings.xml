@@ -6,5 +6,5 @@
     <string name="image_text">Titre</string>
     <string name="button_home">Tape ici pour commencer</string>
     <string name="subtile_home">Explorez et Recherchez vos pokémons préférés !</string>
-    str
+    <string name="pokemon_image">Pokemon image</string>
 </resources>
