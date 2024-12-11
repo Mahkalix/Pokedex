@@ -90,6 +90,9 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
             if (pokemonDetails.getStats() != null) {
                 StringBuilder stats = new StringBuilder();
                 for (PokemonDetails.Stat stat : pokemonDetails.getStats()) {
+                    Log.d("lol", "Stat Name: " + stat.getStat().getName());
+                    Log.d("lol", "Base Stat: " + stat.getBaseStat());
+                    Log.d("lol", "Effort: " + stat.getEffort());
                     stats.append(stat.getStat().getName())
                             .append(": ")
                             .append(stat.getBaseStat())
@@ -98,10 +101,10 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                             .append(")\n");
                 }
                 intent.putExtra("pokemon_stats", stats.toString().trim());
+            } else {
+                intent.putExtra("pokemon_stats", "No stats available");
             }
 
-            Log.d(TAG, "Sending Pokémon Details: " + pokemon.getName());
-            Log.d(TAG, "Sending Pokémon Details: " + pokemon.getNumber());
             context.startActivity(intent);
 
         });

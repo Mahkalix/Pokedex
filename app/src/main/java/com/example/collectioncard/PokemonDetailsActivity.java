@@ -56,6 +56,8 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         String abilities = getIntent().getStringExtra("pokemon_abilities");
         String stats = getIntent().getStringExtra("pokemon_stats");
 
+
+
         // Validate data
         types = types != null ? types : "No types available";
         abilities = abilities != null ? abilities : "No abilities available";
@@ -94,6 +96,20 @@ public class PokemonDetailsActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     PokemonDetails details = response.body();
                     Log.d(TAG, "Pokemon details: " + details);
+
+                    // Log les stats pour voir ce que tu récupères
+                    if (details.getStats() != null && !details.getStats().isEmpty()) {
+                        for (PokemonDetails.Stat stat : details.getStats()) {
+                            if (stat != null && stat.getStat() != null && stat.getStat().getName() != null) {
+                                // Afficher chaque stat dans Logcat
+                                Log.d(TAG, "Stat name: " + stat.getStat().getName());
+                                Log.d(TAG, "Stat base: " + stat.getBaseStat());
+                                Log.d(TAG, "Stat effort: " + stat.getEffort());
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "No stats available");
+                    }
 
                     // Update UI
                     updateUI(details);
