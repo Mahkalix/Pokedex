@@ -5,25 +5,29 @@
     android:layout_margin="8dp">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:padding="8dp">
 
         <!-- ImageView pour afficher l'image du Pokémon -->
         <ImageView
             android:id="@+id/pokemonImage"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:contentDescription="Image du Pokémon"
-            android:layout_marginEnd="16dp"/>
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:contentDescription="Image du Pokémon" />
 
         <!-- TextView pour afficher le nom du Pokémon -->
         <TextView
             android:id="@+id/pokemonName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
+            android:gravity="center"
             android:text="Nom du Pokémon"
-            android:textSize="18sp" />
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -2,13 +2,25 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
+
+        <!-- Button for going back -->
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retour"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="start" />
+
 
         <!-- ImageView for Pokémon sprite -->
         <ImageView
@@ -45,6 +57,7 @@
             android:layout_height="wrap_content"
             android:text="Types:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:layout_marginBottom="4dp" />
 
         <TextView
@@ -61,6 +74,7 @@
             android:layout_height="wrap_content"
             android:text="Abilities:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:layout_marginBottom="4dp" />
 
         <TextView
@@ -77,6 +91,7 @@
             android:layout_height="wrap_content"
             android:text="Stats:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:layout_marginBottom="4dp" />
 
         <TextView
@@ -93,6 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:textColor="@android:color/black"
             android:layout_marginTop="16dp" />
 
     </LinearLayout>

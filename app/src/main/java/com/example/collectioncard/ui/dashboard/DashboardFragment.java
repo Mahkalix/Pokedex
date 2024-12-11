@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +43,7 @@ public class DashboardFragment extends Fragment {
 
         // Configurer la RecyclerView
         recyclerView = rootView.findViewById(R.id.recyclerViewPokemonsDashboard);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         // Appel à l'API pour récupérer les Pokémon
         fetchPokemonData();

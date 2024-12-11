@@ -10,7 +10,7 @@ import retrofit2.http.Url;
 public interface PokeApiService {
 
     // Récupérer la liste des Pokémon
-    @GET("pokemon?limit=100")
+    @GET("pokemon?limit=151")
     Call<PokemonResponse> getPokemons();
 
     // Récupérer les détails d'un Pokémon

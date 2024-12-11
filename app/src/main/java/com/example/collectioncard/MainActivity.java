@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Configurer la RecyclerView
         RecyclerView recyclerView = binding.recyclerViewPokemons;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
         // Configurer l'adaptateur
         pokemonAdapter = new PokemonAdapter(pokemonList, this);
         recyclerView.setAdapter(pokemonAdapter);
