@@ -1,83 +1,24 @@
 package com.example.collectioncard.model;
+
 import java.util.List;
 
 public class PokemonDetails {
+
+    private String name;
+    private Sprites sprites;
     private List<Type> types;
     private List<Ability> abilities;
     private List<Stat> stats;
 
-    private Sprites sprites;
-    private String name;
-
-    public List<Type> getTypes() {
-        return types;
-    }
-
-    public List<Ability> getAbilities() {
-        return abilities;
-    }
-
-    public List<Stat> getStats() {
-        return stats;
-    }
-
-    public static class Type {
-        private TypeDetail type;
-
-        public TypeDetail getType() {
-            return type;
-        }
-
-        public static class TypeDetail {
-            private String name;
-
-            public String getName() {
-                return name;
-            }
-        }
-    }
-
-    public static class Ability {
-        private AbilityDetail ability;
-
-        public AbilityDetail getAbility() {
-            return ability;
-        }
-
-        public static class AbilityDetail {
-            private String name;
-
-            public String getName() {
-                return name;
-            }
-        }
-    }
-
-    public static class Stat {
-        private int base_stat;
-        private StatDetail stat;
-
-        public int getBaseStat() {
-            return base_stat;
-        }
-
-        public StatDetail getStat() {
-            return stat;
-        }
-
-        public static class StatDetail {
-            private String name;
-
-            public String getName() {
-                return name;
-            }
-        }
-    }
-
-
+    // Getters and setters
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Sprites getSprites() {
         return sprites;
     }
@@ -86,15 +27,124 @@ public class PokemonDetails {
         this.sprites = sprites;
     }
 
+    public List<Type> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<Type> types) {
+        this.types = types;
+    }
+
+    public List<Ability> getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(List<Ability> abilities) {
+        this.abilities = abilities;
+    }
+
+    public List<Stat> getStats() {
+        return stats;
+    }
+
+    public void setStats(List<Stat> stats) {
+        this.stats = stats;
+    }
+
+    // Sous-classe Sprites
     public static class Sprites {
-        private String front_default;
+        private String frontDefault;
 
         public String getFrontDefault() {
-            return front_default;
+            return frontDefault;
         }
 
-        public void setFrontDefault(String front_default) {
-            this.front_default = front_default;
+        public void setFrontDefault(String frontDefault) {
+            this.frontDefault = frontDefault;
+        }
+    }
+
+    // Sous-classe Type
+    public static class Type {
+        private TypeInfo type;
+
+        public TypeInfo getType() {
+            return type;
+        }
+
+        public void setType(TypeInfo type) {
+            this.type = type;
+        }
+
+        public static class TypeInfo {
+            private String name;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+        }
+    }
+
+    // Sous-classe Ability
+    public static class Ability {
+        private AbilityInfo ability;
+
+        public AbilityInfo getAbility() {
+            return ability;
+        }
+
+        public void setAbility(AbilityInfo ability) {
+            this.ability = ability;
+        }
+
+        public static class AbilityInfo {
+            private String name;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+        }
+    }
+
+    // Sous-classe Stat
+    public static class Stat {
+        private StatInfo stat;
+        private int baseStat;
+
+        public StatInfo getStat() {
+            return stat;
+        }
+
+        public void setStat(StatInfo stat) {
+            this.stat = stat;
+        }
+
+        public int getBaseStat() {
+            return baseStat;
+        }
+
+        public void setBaseStat(int baseStat) {
+            this.baseStat = baseStat;
+        }
+
+        public static class StatInfo {
+            private String name;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
         }
     }
 }

@@ -14,14 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.collectioncard.model.Pokemon;
+import com.example.collectioncard.model.PokemonDetails;
 
 import java.util.List;
 
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder> {
 
-    private static final String TAG = "TZG";
-    private final List<Pokemon> pokemonList;
-    private final Context context; // Ajout du contexte pour gérer l'Intent
+    private static final String TAG = "PokemonAdapter";
+    private final List<Pokemon> pokemonList; // Liste des Pokémon à afficher
+    private final Context context; // Contexte pour gérer l'Intent
 
     // Constructeur
     public PokemonAdapter(List<Pokemon> pokemonList, Context context) {
@@ -40,30 +41,61 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
     public void onBindViewHolder(@NonNull PokemonViewHolder holder, int position) {
         Pokemon pokemon = pokemonList.get(position);
 
-        // Mettre à jour le texte du nom
-        holder.nameTextView.setText(pokemon.getName());
+        // Construire un objet PokemonDetails à partir des données disponibles
+        PokemonDetails pokemonDetails = new PokemonDetails();
+        pokemon.setName(pokemon.getName());
+        pokemonDetails.setSprites(new PokemonDetails.Sprites());
+        pokemonDetails.getSprites().setFrontDefault(
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + pokemon.getNumber() + ".png"
+        );
 
-        // Charger l'image avec Glide
+        // Mettre à jour l'affichage dans l'item
+        holder.nameTextView.setText(pokemon.getName());
         Glide.with(holder.itemView.getContext())
-                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + pokemon.getNumber() + ".png")
-                .placeholder(R.drawable.placeholder_image) // Image de remplacement
-                .error(R.drawable.error_image)            // Image en cas d'erreur
+                .load(pokemonDetails.getSprites().getFrontDefault())
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.error_image)
                 .into(holder.pokemonImageView);
 
-        // Gérer le clic sur un élément
+        // Gérer le clic sur l'élément
         holder.itemView.setOnClickListener(v -> {
-            // Créer un Intent pour démarrer l'activité PokemonDetailsActivity
             Intent intent = new Intent(context, PokemonDetailsActivity.class);
 
-            // Ajouter des données au Pokémon (nom et numéro)
+            // Passer les données du Pokémon via Intent
             intent.putExtra("pokemon_name", pokemon.getName());
             intent.putExtra("pokemon_number", pokemon.getNumber());
 
-            Log.d(TAG, "Sending Pokémon Name: " + pokemon.getName());
-            Log.d(TAG, "Sending Pokémon Number: " + pokemon.getNumber());
+            // Convertir et passer les types du Pokémon
+            if (pokemonDetails.getTypes() != null) {
+                StringBuilder types = new StringBuilder();
+                for (PokemonDetails.Type type : pokemonDetails.getTypes()) {
+                    types.append(type.getType().getName()).append(", ");
+                }
+                intent.putExtra("pokemon_types", types.toString().trim());
+            }
 
+            // Ajouter les abilities
+            if (pokemonDetails.getAbilities() != null) {
+                StringBuilder abilities = new StringBuilder();
+                for (PokemonDetails.Ability ability : pokemonDetails.getAbilities()) {
+                    abilities.append(ability.getAbility().getName()).append(", ");
+                }
+                intent.putExtra("pokemon_abilities", abilities.toString().trim());
+            }
 
-            // Lancer l'activité
+            // Ajouter les stats
+            if (pokemonDetails.getStats() != null) {
+                StringBuilder stats = new StringBuilder();
+                for (PokemonDetails.Stat stat : pokemonDetails.getStats()) {
+                    stats.append(stat.getStat().getName())
+                            .append(": ")
+                            .append(stat.getBaseStat())
+                            .append("\n");
+                }
+                intent.putExtra("pokemon_stats", stats.toString().trim());
+            }
+
+            Log.d(TAG, "Sending Pokémon Details: " + pokemonDetails.getName());
             context.startActivity(intent);
         });
     }
@@ -73,14 +105,15 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
         return pokemonList.size();
     }
 
+    // Classe interne pour gérer les vues de chaque élément
     public static class PokemonViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         ImageView pokemonImageView;
 
         public PokemonViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.pokemonName);
-            pokemonImageView = itemView.findViewById(R.id.pokemonImage);
+            nameTextView = itemView.findViewById(R.id.pokemonName); // Correspond à l'ID dans le layout item_pokemon.xml
+            pokemonImageView = itemView.findViewById(R.id.pokemonImage); // ID pour l'image
         }
     }
 }

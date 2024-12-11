@@ -2,32 +2,31 @@ package com.example.collectioncard;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.collectioncard.model.PokemonDetails;
+import com.example.collectioncard.network.ApiClient;
+import com.example.collectioncard.network.PokeApiService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import com.example.collectioncard.network.ApiClient;
-import com.example.collectioncard.network.PokeApiService;
-
 public class PokemonDetailsActivity extends AppCompatActivity {
 
-    private static final String TAG = "INFOS";
-
+    private static final String TAG = "PokemonDetailsActivity";
+    private TextView numberTextView;
     private TextView typesTextView;
     private TextView abilitiesTextView;
     private TextView statsTextView;
-    private TextView typeTextView;
-
-    private TextView numberTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,76 +40,91 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         abilitiesTextView = findViewById(R.id.pokemonAbilities);
         statsTextView = findViewById(R.id.pokemonStats);
         ImageView imageView = findViewById(R.id.pokemonImage);
-        typeTextView = findViewById(R.id.pokemonType);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
 
         // Get data from Intent
         String name = getIntent().getStringExtra("pokemon_name");
         int number = getIntent().getIntExtra("pokemon_number", -1);
 
-        // Update name and image
         if (name != null && number != -1) {
             nameTextView.setText(name);
+            numberTextView.setText("#" + number);
             Glide.with(this)
                     .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + number + ".png")
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.error_image)
                     .into(imageView);
-            // Vérifier l'URL avant de faire la requête
-            String url = "https://pokeapi.co/api/v2/pokemon/" + number;
-            Log.d(TAG, "number " + number);
 
-            //ajouter le numero du pokemon dans le textview
-            numberTextView.setText("#" + number);
-
+            // Fetch details from API
+            fetchPokemonDetails(number, progressBar);
         } else {
-            Log.e(TAG, "Failed to retrieve Pokemon details from Intent");
+            Log.e(TAG, "Failed to retrieve Pokémon details from Intent");
+            Toast.makeText(this, "Invalid Pokémon data.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void fetchPokemonDetails(int number) {
-        // Instantiate Retrofit client
-        PokeApiService apiService = ApiClient.getRetrofitInstance().create(PokeApiService.class);
+    private void fetchPokemonDetails(int number, ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
 
-        // Make API request to get Pokemon details
+        PokeApiService apiService = ApiClient.getRetrofitInstance().create(PokeApiService.class);
         Call<PokemonDetails> call = apiService.getPokemonDetails(String.valueOf(number));
+
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<PokemonDetails> call, @NonNull Response<PokemonDetails> response) {
-                Log.d(TAG, "Response code: " + response.code()); // Log du code de statut
+                progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
                     PokemonDetails details = response.body();
-
-                    // Log the details for debugging
                     Log.d(TAG, "Pokemon details: " + details);
 
-                    // Update types
-                    StringBuilder typesBuilder = new StringBuilder();
-                    for (PokemonDetails.Type type : details.getTypes()) {
-                        typesBuilder.append(type.getType().getName()).append(", ");
-                    }
-                    typesTextView.setText(typesBuilder.toString().replaceAll(", $", ""));
-
-                    // Update abilities
-                    StringBuilder abilitiesBuilder = new StringBuilder();
-                    for (PokemonDetails.Ability ability : details.getAbilities()) {
-                        abilitiesBuilder.append(ability.getAbility().getName()).append(", ");
-                    }
-                    abilitiesTextView.setText(abilitiesBuilder.toString().replaceAll(", $", ""));
-
-                    // Update stats
-                    StringBuilder statsBuilder = new StringBuilder();
-                    for (PokemonDetails.Stat stat : details.getStats()) {
-                        statsBuilder.append(stat.getStat().getName()).append(": ")
-                                .append(stat.getBaseStat()).append("\n");
-                    }
-                    statsTextView.setText(statsBuilder.toString());
+                    // Update UI
+                    updateUI(details);
                 } else {
-                    Log.e(TAG, "Failed to fetch Pokemon details from API");
+                    Log.e(TAG, "API response unsuccessful: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<PokemonDetails> call, @NonNull Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 Log.e(TAG, "API call failed: " + t.getMessage());
+                Toast.makeText(PokemonDetailsActivity.this, "Failed to load Pokémon details.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateUI(PokemonDetails details) {
+        // Update types
+        StringBuilder typesBuilder = new StringBuilder();
+        if (details.getTypes() != null) {
+            for (PokemonDetails.Type type : details.getTypes()) {
+                typesBuilder.append(type.getType().getName()).append(", ");
+            }
+            typesTextView.setText(typesBuilder.toString().replaceAll(", $", ""));
+        } else {
+            typesTextView.setText("No types available");
+        }
+
+        // Update abilities
+        StringBuilder abilitiesBuilder = new StringBuilder();
+        if (details.getAbilities() != null) {
+            for (PokemonDetails.Ability ability : details.getAbilities()) {
+                abilitiesBuilder.append(ability.getAbility().getName()).append(", ");
+            }
+            abilitiesTextView.setText(abilitiesBuilder.toString().replaceAll(", $", ""));
+        } else {
+            abilitiesTextView.setText("No abilities available");
+        }
+
+        // Update stats
+        StringBuilder statsBuilder = new StringBuilder();
+        if (details.getStats() != null) {
+            for (PokemonDetails.Stat stat : details.getStats()) {
+                statsBuilder.append(stat.getStat().getName()).append(": ").append(stat.getBaseStat()).append("\n");
+            }
+            statsTextView.setText(statsBuilder.toString());
+        } else {
+            statsTextView.setText("No stats available");
+        }
     }
 }

@@ -7,4 +7,5 @@
     <string name="button_home">Tape ici pour commencer</string>
     <string name="subtile_home">Explorez et Recherchez vos pokémons préférés !</string>
     <string name="pokemon_image">Pokemon image</string>
+    <string name="pokemon_image_description">La description de ce pokemon n\'est pas disponible\n</string>
 </resources>
