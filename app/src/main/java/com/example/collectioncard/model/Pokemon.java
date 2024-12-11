@@ -2,7 +2,7 @@ package com.example.collectioncard.model;
 
 public class Pokemon {
     private String name;
-    private String url;
+    private final String url;
     private String imageUrl;
     private int number;
 

@@ -49,6 +49,11 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + pokemon.getNumber() + ".png"
         );
 
+        Log.d(TAG, "onBindViewHolder: " + pokemonDetails.getSprites().getFrontDefault());
+        Log.d(TAG, "Generated Sprite URL: " + pokemonDetails.getSprites().getFrontDefault());
+
+
+
         // Mettre à jour l'affichage dans l'item
         holder.nameTextView.setText(pokemon.getName());
         Glide.with(holder.itemView.getContext())
@@ -95,7 +100,8 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                 intent.putExtra("pokemon_stats", stats.toString().trim());
             }
 
-            Log.d(TAG, "Sending Pokémon Details: " + pokemonDetails.getName());
+            Log.d(TAG, "Sending Pokémon Details: " + pokemon.getName());
+            Log.d(TAG, "Sending Pokémon Details: " + pokemon.getNumber());
             context.startActivity(intent);
         });
     }

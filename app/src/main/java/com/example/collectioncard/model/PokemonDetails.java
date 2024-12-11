@@ -3,21 +3,10 @@ package com.example.collectioncard.model;
 import java.util.List;
 
 public class PokemonDetails {
-
-    private String name;
     private Sprites sprites;
     private List<Type> types;
     private List<Ability> abilities;
     private List<Stat> stats;
-
-    // Getters and setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Sprites getSprites() {
         return sprites;
@@ -50,6 +39,39 @@ public class PokemonDetails {
     public void setStats(List<Stat> stats) {
         this.stats = stats;
     }
+
+    // Ajout de la méthode toString() pour afficher les détails dans les logs
+    @Override
+    public String toString() {
+        StringBuilder details = new StringBuilder();
+        details.append("Sprites: ").append(sprites != null ? sprites.getFrontDefault() : "No sprite available").append("\n");
+        details.append("Types: ");
+        if (types != null && !types.isEmpty()) {
+            for (Type type : types) {
+                details.append(type.getType().getName()).append(" ");  // Extraction du nom du type
+            }
+        } else {
+            details.append("No types available");
+        }
+        details.append("\nAbilities: ");
+        if (abilities != null && !abilities.isEmpty()) {
+            for (Ability ability : abilities) {
+                details.append(ability.getAbility().getName()).append(" ");  // Extraction du nom de la capacité
+            }
+        } else {
+            details.append("No abilities available");
+        }
+        details.append("\nStats: ");
+        if (stats != null && !stats.isEmpty()) {
+            for (Stat stat : stats) {
+                details.append(stat.getStat().getName()).append(": ").append(stat.getBaseStat()).append(" ");  // Extraction du nom et de la valeur de la stat
+            }
+        } else {
+            details.append("No stats available");
+        }
+        return details.toString();
+    }
+
 
     // Sous-classe Sprites
     public static class Sprites {
