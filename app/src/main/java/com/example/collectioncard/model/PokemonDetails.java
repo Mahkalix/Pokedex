@@ -8,6 +8,7 @@ public class PokemonDetails {
     private List<Ability> abilities;
     private List<Stat> stats;
 
+
     public Sprites getSprites() {
         return sprites;
     }
@@ -61,15 +62,25 @@ public class PokemonDetails {
         } else {
             details.append("No abilities available");
         }
-        details.append("\nStats: ");
+        details.append("Stats: ");
         if (stats != null && !stats.isEmpty()) {
             for (Stat stat : stats) {
-                details.append(stat.getStat().getName()).append(": ").append(stat.getBaseStat()).append(" ");  // Extraction du nom et de la valeur de la stat
+                details.append(stat.getStat().getName()).append(": ")
+                        .append(stat.getBaseStat()).append(" (Effort: ")
+                        .append(stat.getEffort()).append(") ");  // Extraction du nom, de la valeur de la stat et de l'effort
             }
         } else {
             details.append("No stats available");
         }
         return details.toString();
+    }
+
+    private String getEffortStars(int effort) {
+        StringBuilder stars = new StringBuilder();
+        for (int i = 0; i < effort; i++) {
+            stars.append("*");  // Ajoute une étoile pour chaque unité d'effort
+        }
+        return stars.toString();
     }
 
 
@@ -140,6 +151,7 @@ public class PokemonDetails {
     public static class Stat {
         private StatInfo stat;
         private int baseStat;
+        private int effort;
 
         public StatInfo getStat() {
             return stat;
@@ -157,6 +169,15 @@ public class PokemonDetails {
             this.baseStat = baseStat;
         }
 
+        // Getter pour effort
+        public int getEffort() {
+            return effort;  // Retourne la valeur de l'effort
+        }
+
+        // Setter pour effort
+        public void setEffort(int effort) {
+            this.effort = effort;  // Définit la valeur de l'effort
+        }
         public static class StatInfo {
             private String name;
 

@@ -16,7 +16,7 @@
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Retour"
+            android:text="Back"
             android:textColor="@android:color/white"
             android:layout_marginBottom="16dp"
             android:layout_gravity="start" />

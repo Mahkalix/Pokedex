@@ -52,8 +52,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
         Log.d(TAG, "onBindViewHolder: " + pokemonDetails.getSprites().getFrontDefault());
         Log.d(TAG, "Generated Sprite URL: " + pokemonDetails.getSprites().getFrontDefault());
 
-
-
         // Mettre à jour l'affichage dans l'item
         holder.nameTextView.setText(pokemon.getName());
         Glide.with(holder.itemView.getContext())
@@ -95,7 +93,9 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                     stats.append(stat.getStat().getName())
                             .append(": ")
                             .append(stat.getBaseStat())
-                            .append("\n");
+                            .append(" (Effort: ")
+                            .append(getEffortStars(stat.getEffort()))  // Ajout des étoiles pour l'effort
+                            .append(")\n");
                 }
                 intent.putExtra("pokemon_stats", stats.toString().trim());
             }
@@ -103,6 +103,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
             Log.d(TAG, "Sending Pokémon Details: " + pokemon.getName());
             Log.d(TAG, "Sending Pokémon Details: " + pokemon.getNumber());
             context.startActivity(intent);
+
         });
     }
 
@@ -121,5 +122,14 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
             nameTextView = itemView.findViewById(R.id.pokemonName); // Correspond à l'ID dans le layout item_pokemon.xml
             pokemonImageView = itemView.findViewById(R.id.pokemonImage); // ID pour l'image
         }
+    }
+
+    // Méthode pour générer des étoiles en fonction de l'effort
+    private String getEffortStars(int effort) {
+        StringBuilder stars = new StringBuilder();
+        for (int i = 0; i < effort; i++) {
+            stars.append("*");
+        }
+        return stars.toString();
     }
 }
