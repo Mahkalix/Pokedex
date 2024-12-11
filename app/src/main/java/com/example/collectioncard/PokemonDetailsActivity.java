@@ -1,10 +1,10 @@
 package com.example.collectioncard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.collectioncard.model.PokemonDetails;
 import com.example.collectioncard.network.ApiClient;
 import com.example.collectioncard.network.PokeApiService;
+import com.example.collectioncard.ui.dashboard.DashboardFragment;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +34,12 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pokemon_details);
 
+        // In your PokemonDetailsActivity.java
+
+        Button backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> onBackPressed());
+
+
         // Find views
         TextView nameTextView = findViewById(R.id.pokemonName);
         numberTextView = findViewById(R.id.pokemonNumber);
@@ -40,7 +47,7 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         abilitiesTextView = findViewById(R.id.pokemonAbilities);
         statsTextView = findViewById(R.id.pokemonStats);
         ImageView imageView = findViewById(R.id.pokemonImage);
-        ProgressBar progressBar = findViewById(R.id.progressBar);
+
 
         // Get data from Intent
         String name = getIntent().getStringExtra("pokemon_name");
@@ -56,15 +63,15 @@ public class PokemonDetailsActivity extends AppCompatActivity {
                     .into(imageView);
 
             // Fetch details from API
-            fetchPokemonDetails(number, progressBar);
+            fetchPokemonDetails(number);
         } else {
             Log.e(TAG, "Failed to retrieve Pokémon details from Intent");
             Toast.makeText(this, "Invalid Pokémon data.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void fetchPokemonDetails(int number, ProgressBar progressBar) {
-        progressBar.setVisibility(View.VISIBLE);
+    private void fetchPokemonDetails(int number) {
+
 
         PokeApiService apiService = ApiClient.getRetrofitInstance().create(PokeApiService.class);
         Call<PokemonDetails> call = apiService.getPokemonDetails(String.valueOf(number));
@@ -72,7 +79,7 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<PokemonDetails> call, @NonNull Response<PokemonDetails> response) {
-                progressBar.setVisibility(View.GONE);
+
                 if (response.isSuccessful() && response.body() != null) {
                     PokemonDetails details = response.body();
                     Log.d(TAG, "Pokemon details: " + details);
@@ -86,7 +93,7 @@ public class PokemonDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<PokemonDetails> call, @NonNull Throwable t) {
-                progressBar.setVisibility(View.GONE);
+
                 Log.e(TAG, "API call failed: " + t.getMessage());
                 Toast.makeText(PokemonDetailsActivity.this, "Failed to load Pokémon details.", Toast.LENGTH_SHORT).show();
             }

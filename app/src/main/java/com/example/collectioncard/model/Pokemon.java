@@ -1,27 +1,24 @@
 package com.example.collectioncard.model;
 
-import java.util.List;
-
 public class Pokemon {
     private String name;
     private String url;
     private String imageUrl;
     private int number;
 
-
-    // Constructeur
+    // Constructor
     public Pokemon(String name, String url) {
-        this.name = name;
+        setName(name);
         this.url = url;
     }
 
-    // Getters et setters
+    // Getters and setters
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = capitalizeFirstLetter(name);
     }
 
     public String getUrl() {
@@ -33,9 +30,15 @@ public class Pokemon {
     }
 
     public int getNumber() {
-        String[] urlPartes = url.split("/");
-        return Integer.parseInt(urlPartes[urlPartes.length - 1]);
+        String[] urlParts = url.split("/");
+        return Integer.parseInt(urlParts[urlParts.length - 1]);
     }
 
-
+    // Helper method to capitalize the first letter
+    private String capitalizeFirstLetter(String name) {
+        if (name == null || name.isEmpty()) {
+            return name;
+        }
+        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+    }
 }
