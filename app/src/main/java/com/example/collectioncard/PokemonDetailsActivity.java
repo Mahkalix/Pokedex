@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,13 @@ public class PokemonDetailsActivity extends AppCompatActivity {
     private TextView abilitiesTextView;
     private TextView statsTextView;
 
+    private ProgressBar progressBarHP;
+    private ProgressBar progressBarAttack;
+    private ProgressBar progressBarDefense;
+    private ProgressBar progressBarSpecialAttack;
+    private ProgressBar progressBarSpecialDefense;
+    private ProgressBar progressBarSpeed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +47,13 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         abilitiesTextView = findViewById(R.id.pokemonAbilities);
         statsTextView = findViewById(R.id.pokemonStats);
         ImageView imageView = findViewById(R.id.pokemonImage);
-        Button backButton = findViewById(R.id.backButton);
+        ImageView backButton = findViewById(R.id.backButton);
+        progressBarHP = findViewById(R.id.progressBarHP);
+        progressBarAttack = findViewById(R.id.progressBarAttack);
+        progressBarDefense = findViewById(R.id.progressBarDefense);
+        progressBarSpecialAttack = findViewById(R.id.progressBarSpecialAttack);
+        progressBarSpecialDefense = findViewById(R.id.progressBarSpecialDefense);
+        progressBarSpeed = findViewById(R.id.progressBarSpeed);
 
         if (nameTextView == null || numberTextView == null || typesTextView == null ||
                 abilitiesTextView == null || statsTextView == null || imageView == null || backButton == null) {
@@ -65,7 +79,7 @@ public class PokemonDetailsActivity extends AppCompatActivity {
 
         if (name != null && number != -1) {
             nameTextView.setText(name);
-            numberTextView.setText("#" + number);
+            numberTextView.setText("N°" + number);
             typesTextView.setText(types);
             abilitiesTextView.setText(abilities);
             statsTextView.setText(stats);
@@ -164,6 +178,43 @@ public class PokemonDetailsActivity extends AppCompatActivity {
             for (PokemonDetails.Stat stat : details.getStats()) {
                 if (stat != null && stat.getStat() != null && stat.getStat().getName() != null) {
                     statsBuilder.append(stat.getStat().getName()).append(": ").append(stat.getBaseStat()).append("\n");
+                    int baseStat = stat.getBaseStat();
+                    int percentage = (baseStat * 100) / 255;
+                    int percentageHp = (baseStat * 100) / 250;
+                    int percentageAttack = (baseStat * 100) / 134;
+                    int percentageDefense = (baseStat * 100) / 180;
+                    int percentageSpeed = (baseStat * 100) / 140;
+                    int percentageSpecialAttack = (baseStat * 100) / 154;
+                    int percentageSpecialDefense = (baseStat * 100) / 105;
+
+                    statsBuilder.append(stat.getStat().getName()).append(": ").append(baseStat).append(" (").append(percentage).append("%)").append("\n");
+
+                    switch (stat.getStat().getName()) {
+                        case "hp":
+                            progressBarHP.setProgress(percentageHp);
+                            ((TextView) findViewById(R.id.hpTitle)).setText("HP: " + baseStat);
+                            break;
+                        case "attack":
+                            progressBarAttack.setProgress(percentageAttack);
+                            ((TextView) findViewById(R.id.attackTitle)).setText("Attack: " + baseStat);
+                            break;
+                        case "defense":
+                            progressBarDefense.setProgress(percentageDefense);
+                            ((TextView) findViewById(R.id.defenseTitle)).setText("Defense: " + baseStat);
+                            break;
+                        case "special-attack":
+                            progressBarSpecialAttack.setProgress(percentageSpecialAttack);
+                            ((TextView) findViewById(R.id.specialAttackTitle)).setText("Special Attack: " + baseStat);
+                            break;
+                        case "special-defense":
+                            progressBarSpecialDefense.setProgress(percentageSpecialDefense);
+                            ((TextView) findViewById(R.id.specialDefenseTitle)).setText("Special Defense: " + baseStat);
+                            break;
+                        case "speed":
+                            progressBarSpeed.setProgress(percentageSpeed);
+                            ((TextView) findViewById(R.id.speedTitle)).setText("Speed: " + baseStat);
+                            break;
+                    }
                 }
             }
             statsTextView.setText(statsBuilder.toString());

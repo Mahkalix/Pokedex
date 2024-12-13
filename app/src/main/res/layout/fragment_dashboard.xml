@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context="DashboardFragment">
 
+   <ImageView
+    android:id="@+id/loadingImage"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    android:src="@drawable/placeholder_image"
+    android:visibility="gone"
+    android:gravity="center"
+    android:maxHeight="100dp"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPokemonsDashboard"
         android:layout_width="0dp"

@@ -1,11 +1,11 @@
 package com.example.collectioncard.ui.dashboard;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -30,6 +30,7 @@ public class DashboardFragment extends Fragment {
     private RecyclerView recyclerView;
     private PokemonAdapter pokemonAdapter;
     private List<Pokemon> pokemonList;
+    private ImageView loadingImage;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -41,23 +42,36 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        // Configurer la RecyclerView
+        // Initialize the loading image
+        loadingImage = rootView.findViewById(R.id.loadingImage);
+
+        // Configure the RecyclerView
         recyclerView = rootView.findViewById(R.id.recyclerViewPokemonsDashboard);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-        // Appel à l'API pour récupérer les Pokémon
+        // Fetch Pokémon data
         fetchPokemonData();
 
         return rootView;
     }
 
+    private void onLoading(boolean isLoading) {
+        if (isLoading) {
+            loadingImage.setVisibility(View.VISIBLE);
+        } else {
+            loadingImage.setVisibility(View.GONE);
+        }
+    }
+
     private void fetchPokemonData() {
+        onLoading(true);
         PokeApiService service = ApiClient.getRetrofitInstance().create(PokeApiService.class);
         Call<PokemonResponse> call = service.getPokemons();
 
         call.enqueue(new Callback<PokemonResponse>() {
             @Override
             public void onResponse(Call<PokemonResponse> call, Response<PokemonResponse> response) {
+                onLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
                     pokemonList = response.body().getResults();
 
@@ -68,7 +82,8 @@ public class DashboardFragment extends Fragment {
 
             @Override
             public void onFailure(Call<PokemonResponse> call, Throwable t) {
-                // Gérer les erreurs réseau ici
+                onLoading(false);
+                // Handle network errors here
                 Toast.makeText(getContext(), "Erreur lors du chargement des Pokémon", Toast.LENGTH_SHORT).show();
             }
         });

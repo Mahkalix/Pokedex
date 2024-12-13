@@ -11,98 +11,247 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <!-- Button for going back -->
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="16dp"
-            android:layout_gravity="start" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="start"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="40dp">
 
+        <!-- Button for going back -->
+       <ImageView
+    android:id="@+id/backButton"
+    android:layout_width="40dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+           android:gravity="center"
+    android:src="@drawable/arrow_back"
+           android:layout_marginRight="6dp"/>
+
+
+            <!-- TextView for Pokémon name -->
+            <TextView
+                android:id="@+id/pokemonName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:text="Pokemon Name" />
+
+            <!-- TextView for Pokémon number -->
+            <TextView
+                android:id="@+id/pokemonNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+        <!-- Horizontal layout for Pokémon name and number -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="20dp">
 
         <!-- ImageView for Pokémon sprite -->
         <ImageView
             android:id="@+id/pokemonImage"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:contentDescription="@string/pokemon_image_description"
             android:layout_marginBottom="16dp"
-            android:contentDescription="@string/pokemon_image_description" />
+            android:layout_marginTop="16dp"
+            android:background="@drawable/border_shadow" />
 
-        <!-- TextView for Pokémon name -->
+  <!-- Section for Pokémon types and abilities -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="start"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+
+    <!-- Types -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Types"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/pokemonTypes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rounded_background"
+                    android:padding="10dp"
+                    android:text="Fire, Flying"
+                    android:textColor="@android:color/black" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+    <!-- Abilities -->
+
+
         <TextView
-            android:id="@+id/pokemonName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:text="Abilities"
+            android:textSize="18dp"
             android:textColor="@android:color/black"
-            android:text="Pokemon Name" />
-
-        <!-- TextView for Pokémon number -->
-        <TextView
-            android:id="@+id/pokemonNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:textSize="18sp"
-            android:textColor="@android:color/darker_gray"
-            android:text="#000" />
-
-        <!-- Section for Pokémon types -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Types:"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="4dp" />
-
-        <TextView
-            android:id="@+id/pokemonTypes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Fire, Flying"
-            android:textColor="@android:color/black" />
-
-        <!-- Section for Pokémon abilities -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Abilities:"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginEnd="8dp" />
 
         <TextView
             android:id="@+id/pokemonAbilities"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:text="Blaze, Solar Power"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/rounded_background" />
+    </LinearLayout>
 
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start"
+           >
         <!-- Section for Pokémon stats -->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Stats:"
-            android:textStyle="bold"
+            android:text="Stats"
+            android:layout_marginBottom="4dp"
             android:textColor="@android:color/black"
-            android:layout_marginBottom="4dp" />
+            android:gravity="start"
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/pokemonStats"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="HP: 78\nAttack: 84\nDefense: 78"
-            android:textColor="@android:color/black" />
+            android:text="Stats will be displayed here"
+            android:textColor="@android:color/black"
+            android:visibility="gone"
+            />
 
 
+        <!-- HP -->
+        <TextView
+            android:id="@+id/hpTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HP: 0%"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp" />
+        <ProgressBar
+            android:id="@+id/progressBarHP"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:progressDrawable="@drawable/custom_progress_bar"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Attack -->
+        <TextView
+            android:id="@+id/attackTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Attack: 0%"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp" />
+        <ProgressBar
+            android:id="@+id/progressBarAttack"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/custom_progress_bar"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Defense -->
+        <TextView
+            android:id="@+id/defenseTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Defense: 0%"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp" />
+        <ProgressBar
+            android:id="@+id/progressBarDefense"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/custom_progress_bar"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Special Attack -->
+        <TextView
+            android:id="@+id/specialAttackTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Special Attack: 0%"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp" />
+        <ProgressBar
+            android:id="@+id/progressBarSpecialAttack"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/custom_progress_bar"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Special Defense -->
+        <TextView
+            android:id="@+id/specialDefenseTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Special Defense: 0%"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp" />
+        <ProgressBar
+            android:id="@+id/progressBarSpecialDefense"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/custom_progress_bar"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Speed -->
+        <TextView
+            android:id="@+id/speedTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Speed: 0%"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp" />
+        <ProgressBar
+            android:id="@+id/progressBarSpeed"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/custom_progress_bar"
+            android:layout_marginBottom="16dp" />
+    </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
