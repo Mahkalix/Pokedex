@@ -2,6 +2,7 @@ package com.example.collectioncard.ui.dashboard;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -31,6 +32,7 @@ public class DashboardFragment extends Fragment {
     private PokemonAdapter pokemonAdapter;
     private List<Pokemon> pokemonList;
     private ImageView loadingImage;
+    private SearchView searchView;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -48,6 +50,23 @@ public class DashboardFragment extends Fragment {
         // Configure the RecyclerView
         recyclerView = rootView.findViewById(R.id.recyclerViewPokemonsDashboard);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        // Initialize the SearchView
+        searchView = rootView.findViewById(R.id.searchViewPokemon);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (pokemonAdapter != null) {
+                    pokemonAdapter.getFilter().filter(newText);
+                }
+                return false;
+            }
+        });
 
         // Fetch Pokémon data
         fetchPokemonData();

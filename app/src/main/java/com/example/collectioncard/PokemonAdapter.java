@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,17 +18,21 @@ import com.bumptech.glide.Glide;
 import com.example.collectioncard.model.Pokemon;
 import com.example.collectioncard.model.PokemonDetails;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder> {
+public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder> implements Filterable {
 
     private static final String TAG = "PokemonAdapter";
-    private final List<Pokemon> pokemonList; // Liste des Pokémon à afficher
-    private final Context context; // Contexte pour gérer l'Intent
+    private final List<Pokemon> pokemonList; // List of Pokémon to display
+    private final List<Pokemon> pokemonListFull; // Full list of Pokémon for filtering
+    private final Context context; // Context to handle Intent
 
-    // Constructeur
+    // Constructor
     public PokemonAdapter(List<Pokemon> pokemonList, Context context) {
         this.pokemonList = pokemonList;
+        this.pokemonListFull = new ArrayList<>(pokemonList); // Initialize the full list
         this.context = context;
     }
 
@@ -41,7 +47,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
     public void onBindViewHolder(@NonNull PokemonViewHolder holder, int position) {
         Pokemon pokemon = pokemonList.get(position);
 
-        // Construire un objet PokemonDetails à partir des données disponibles
+        // Build a PokemonDetails object from available data
         PokemonDetails pokemonDetails = new PokemonDetails();
         pokemon.setName(pokemon.getName());
         pokemonDetails.setSprites(new PokemonDetails.Sprites());
@@ -52,7 +58,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
         Log.d(TAG, "onBindViewHolder: " + pokemonDetails.getSprites().getFrontDefault());
         Log.d(TAG, "Generated Sprite URL: " + pokemonDetails.getSprites().getFrontDefault());
 
-        // Mettre à jour l'affichage dans l'item
+        // Update the item view
         holder.nameTextView.setText(pokemon.getName());
         Glide.with(holder.itemView.getContext())
                 .load(pokemonDetails.getSprites().getFrontDefault())
@@ -60,15 +66,15 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                 .error(R.drawable.error_image)
                 .into(holder.pokemonImageView);
 
-        // Gérer le clic sur l'élément
+        // Handle item click
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PokemonDetailsActivity.class);
 
-            // Passer les données du Pokémon via Intent
+            // Pass Pokémon data via Intent
             intent.putExtra("pokemon_name", pokemon.getName());
             intent.putExtra("pokemon_number", pokemon.getNumber());
 
-            // Convertir et passer les types du Pokémon
+            // Convert and pass Pokémon types
             if (pokemonDetails.getTypes() != null) {
                 StringBuilder types = new StringBuilder();
                 for (PokemonDetails.Type type : pokemonDetails.getTypes()) {
@@ -77,7 +83,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                 intent.putExtra("pokemon_types", types.toString().trim());
             }
 
-            // Ajouter les abilities
+            // Add abilities
             if (pokemonDetails.getAbilities() != null) {
                 StringBuilder abilities = new StringBuilder();
                 for (PokemonDetails.Ability ability : pokemonDetails.getAbilities()) {
@@ -86,7 +92,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                 intent.putExtra("pokemon_abilities", abilities.toString().trim());
             }
 
-            // Ajouter les stats
+            // Add stats
             if (pokemonDetails.getStats() != null) {
                 StringBuilder stats = new StringBuilder();
                 for (PokemonDetails.Stat stat : pokemonDetails.getStats()) {
@@ -97,7 +103,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                             .append(": ")
                             .append(stat.getBaseStat())
                             .append(" (Effort: ")
-                            .append(getEffortStars(stat.getEffort()))  // Ajout des étoiles pour l'effort
+                            .append(getEffortStars(stat.getEffort()))  // Add stars for effort
                             .append(")\n");
                 }
                 intent.putExtra("pokemon_stats", stats.toString().trim());
@@ -106,7 +112,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
             }
 
             context.startActivity(intent);
-
         });
     }
 
@@ -115,19 +120,54 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
         return pokemonList.size();
     }
 
-    // Classe interne pour gérer les vues de chaque élément
+    @Override
+    public Filter getFilter() {
+        return pokemonFilter;
+    }
+
+    private final Filter pokemonFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Pokemon> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(pokemonListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Pokemon item : pokemonListFull) {
+                    if (item.getName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            pokemonList.clear();
+            pokemonList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    // Inner class to handle views of each item
     public static class PokemonViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         ImageView pokemonImageView;
 
         public PokemonViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.pokemonName); // Correspond à l'ID dans le layout item_pokemon.xml
-            pokemonImageView = itemView.findViewById(R.id.pokemonImage); // ID pour l'image
+            nameTextView = itemView.findViewById(R.id.pokemonName); // Corresponds to the ID in item_pokemon.xml
+            pokemonImageView = itemView.findViewById(R.id.pokemonImage); // ID for the image
         }
     }
 
-    // Méthode pour générer des étoiles en fonction de l'effort
+    // Method to generate stars based on effort
     private String getEffortStars(int effort) {
         StringBuilder stars = new StringBuilder();
         for (int i = 0; i < effort; i++) {
