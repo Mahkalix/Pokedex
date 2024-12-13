@@ -1,4 +1,4 @@
-# Pokédex Android App
+# Pokédex
 
 ## Description
 
