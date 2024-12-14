@@ -5,7 +5,7 @@
     <string name="title_profile">Profil</string>
     <string name="image_text">Title</string>
     <string name="button_home">Tap here to start</string>
-    <string name="subtile_home">Explore and find your favorite pokémon !</string>
+    <string name="subtile_home">Explore and find your favorite pokémon.</string>
     <string name="pokemon_image">Pokemon image</string>
     <string name="pokemon_image_description">La description de ce pokemon n\'est pas disponible\n</string>
 </resources>
