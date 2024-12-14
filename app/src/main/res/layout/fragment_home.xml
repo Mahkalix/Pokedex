@@ -10,7 +10,7 @@
         android:id="@+id/root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_gradient"
+        android:background="@drawable/background"
         android:orientation="vertical"
         android:clickable="true"
         android:focusable="true"
@@ -25,15 +25,11 @@
         <ImageView
             android:id="@+id/mainImage"
             android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_height="270dp"
             android:layout_gravity="center"
             android:layout_marginTop="4dp"
             android:contentDescription="@string/image_text"
             android:src="@drawable/logo" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
 
         <TextView
             android:id="@+id/TitleText"
@@ -44,6 +40,7 @@
             android:layout_marginEnd="8dp"
             android:textAlignment="center"
             android:text="@string/title_home"
+            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="30sp" />
 
@@ -61,20 +58,18 @@
             android:layout_marginRight="20dp"
             />
 
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
-
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="330dp"
+    />
         <Button
             android:id="@+id/button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
+            android:layout_height="35dp"
             android:animation="@anim/blink"
             android:background="@android:color/transparent"
             android:text="@string/button_home"
+            android:textStyle="bold"
             android:textColor="@color/white" />
 
     </LinearLayout>
