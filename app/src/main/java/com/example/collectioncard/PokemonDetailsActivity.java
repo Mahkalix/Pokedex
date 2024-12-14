@@ -1,8 +1,8 @@
 package com.example.collectioncard;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +28,8 @@ public class PokemonDetailsActivity extends AppCompatActivity {
     private TextView abilitiesTextView;
     private TextView statsTextView;
 
+    private TextView heightTextView;
+    private TextView weightTextView;
     private ProgressBar progressBarHP;
     private ProgressBar progressBarAttack;
     private ProgressBar progressBarDefense;
@@ -46,6 +48,8 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         typesTextView = findViewById(R.id.pokemonTypes);
         abilitiesTextView = findViewById(R.id.pokemonAbilities);
         statsTextView = findViewById(R.id.pokemonStats);
+        heightTextView = findViewById(R.id.pokemonHeight);
+        weightTextView = findViewById(R.id.pokemonWeight);
         ImageView imageView = findViewById(R.id.pokemonImage);
         ImageView backButton = findViewById(R.id.backButton);
         progressBarHP = findViewById(R.id.progressBarHP);
@@ -69,8 +73,6 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         String types = getIntent().getStringExtra("pokemon_types");
         String abilities = getIntent().getStringExtra("pokemon_abilities");
         String stats = getIntent().getStringExtra("pokemon_stats");
-
-
 
         // Validate data
         types = types != null ? types : "No types available";
@@ -111,11 +113,10 @@ public class PokemonDetailsActivity extends AppCompatActivity {
                     PokemonDetails details = response.body();
                     Log.d(TAG, "Pokemon details: " + details);
 
-                    // Log les stats pour voir ce que tu récupères
+                    // Log stats to check data
                     if (details.getStats() != null && !details.getStats().isEmpty()) {
                         for (PokemonDetails.Stat stat : details.getStats()) {
                             if (stat != null && stat.getStat() != null && stat.getStat().getName() != null) {
-                                // Afficher chaque stat dans Logcat
                                 Log.d(TAG, "Stat name: " + stat.getStat().getName());
                                 Log.d(TAG, "Stat base: " + stat.getBaseStat());
                                 Log.d(TAG, "Stat effort: " + stat.getEffort());
@@ -146,12 +147,12 @@ public class PokemonDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        // Update types
+        // Update types with emojis
         if (details.getTypes() != null && !details.getTypes().isEmpty()) {
             StringBuilder typesBuilder = new StringBuilder();
             for (PokemonDetails.Type type : details.getTypes()) {
                 if (type != null && type.getType() != null && type.getType().getName() != null) {
-                    typesBuilder.append(type.getType().getName()).append(", ");
+                    typesBuilder.append(getTypeEmoji(type.getType().getName())).append(" ").append(type.getType().getName()).append(", ");
                 }
             }
             typesTextView.setText(typesBuilder.length() > 0 ? typesBuilder.toString().replaceAll(", $", "") : "No types available");
@@ -172,7 +173,11 @@ public class PokemonDetailsActivity extends AppCompatActivity {
             abilitiesTextView.setText("No abilities available");
         }
 
-        // Update stats
+        // Update height, weight
+        heightTextView.setText("🧍" + details.getHeight() / 10.0 + "m");
+        weightTextView.setText("⚖️" + details.getWeight() / 10.0 + "kg");
+
+        // Update stats and progress bars
         if (details.getStats() != null && !details.getStats().isEmpty()) {
             StringBuilder statsBuilder = new StringBuilder();
             for (PokemonDetails.Stat stat : details.getStats()) {
@@ -191,28 +196,28 @@ public class PokemonDetailsActivity extends AppCompatActivity {
 
                     switch (stat.getStat().getName()) {
                         case "hp":
-                            progressBarHP.setProgress(percentageHp);
-                            ((TextView) findViewById(R.id.hpTitle)).setText("HP: " + baseStat);
+                            animateProgressBar(progressBarHP, percentageHp);
+                            ((TextView) findViewById(R.id.hpTitle)).setText("❤️ "+"HP: " + baseStat);
                             break;
                         case "attack":
-                            progressBarAttack.setProgress(percentageAttack);
-                            ((TextView) findViewById(R.id.attackTitle)).setText("Attack: " + baseStat);
+                            animateProgressBar(progressBarAttack, percentageAttack);
+                            ((TextView) findViewById(R.id.attackTitle)).setText("💥 " +"Attack: " + baseStat);
                             break;
                         case "defense":
-                            progressBarDefense.setProgress(percentageDefense);
-                            ((TextView) findViewById(R.id.defenseTitle)).setText("Defense: " + baseStat);
+                            animateProgressBar(progressBarDefense, percentageDefense);
+                            ((TextView) findViewById(R.id.defenseTitle)).setText("🛡️ "+"Defense: " + baseStat);
                             break;
                         case "special-attack":
-                            progressBarSpecialAttack.setProgress(percentageSpecialAttack);
-                            ((TextView) findViewById(R.id.specialAttackTitle)).setText("Special Attack: " + baseStat);
+                            animateProgressBar(progressBarSpecialAttack, percentageSpecialAttack);
+                            ((TextView) findViewById(R.id.specialAttackTitle)).setText("🌟 "+"Special Attack: " + baseStat);
                             break;
                         case "special-defense":
-                            progressBarSpecialDefense.setProgress(percentageSpecialDefense);
-                            ((TextView) findViewById(R.id.specialDefenseTitle)).setText("Special Defense: " + baseStat);
+                            animateProgressBar(progressBarSpecialDefense, percentageSpecialDefense);
+                            ((TextView) findViewById(R.id.specialDefenseTitle)).setText("🧠 " +"Special Defense: " + baseStat);
                             break;
                         case "speed":
-                            progressBarSpeed.setProgress(percentageSpeed);
-                            ((TextView) findViewById(R.id.speedTitle)).setText("Speed: " + baseStat);
+                            animateProgressBar(progressBarSpeed, percentageSpeed);
+                            ((TextView) findViewById(R.id.speedTitle)).setText("🚀 "+"Speed: " + baseStat);
                             break;
                     }
                 }
@@ -220,6 +225,38 @@ public class PokemonDetailsActivity extends AppCompatActivity {
             statsTextView.setText(statsBuilder.toString());
         } else {
             statsTextView.setText("No stats available");
+        }
+    }
+
+    // Method to animate progress bars
+    private void animateProgressBar(ProgressBar progressBar, int toValue) {
+        ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, toValue);
+        animation.setDuration(1000); // 1 second
+        animation.start();
+    }
+
+    // Method to get the emoji for a Pokémon type
+    private String getTypeEmoji(String type) {
+        switch (type.toLowerCase()) {
+            case "fire": return "🔥";
+            case "water": return "💧";
+            case "grass": return "🌿";
+            case "electric": return "⚡";
+            case "bug": return "🐛";
+            case "poison": return "☠️";
+            case "fighting": return "👊";
+            case "normal": return "⚪";
+            case "ghost": return "👻";
+            case "psychic": return "🧠";
+            case "dragon": return "🐉";
+            case "fairy": return "🧚‍♀️";
+            case "dark": return "🌑";
+            case "ice": return "❄️";
+            case "steel": return "🛠️";
+            case "rock": return "🪨";
+            case "ground": return "🌍";
+            case "flying": return "🦅";
+            default: return "❓"; // Default emoji for unknown types
         }
     }
 }

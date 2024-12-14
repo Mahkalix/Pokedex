@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
@@ -68,65 +69,78 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/border_shadow" />
 
-  <!-- Section for Pokémon types and abilities -->
+  <!-- Section for Pokémon Weight, Height -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="start"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp">
 
 
-    <!-- Types -->
+            <!-- Weight, Height ect... -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Weight"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:layout_marginBottom="10dp"
+                />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="Types"
-                    android:textColor="@android:color/black"
-                    android:textSize="18dp" />
+            <TextView
+                android:id="@+id/pokemonWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Unknown"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:background="@drawable/rounded_background"
+                android:layout_marginTop="5dp"
+                android:padding="10dp"
 
-                <TextView
-                    android:id="@+id/pokemonTypes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/rounded_background"
-                    android:padding="10dp"
-                    android:text="Fire, Flying"
-                    android:textColor="@android:color/black" />
+                 />
 
             <Space
                 android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
-    <!-- Abilities -->
+                android:layout_marginEnd="8dp"
+                android:text="Height"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:layout_marginBottom="10dp"
+                />
+
+            <TextView
+                android:id="@+id/pokemonHeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Unknown"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:background="@drawable/rounded_background"
+                android:layout_marginTop="5dp"
+                android:padding="10dp"
+                     />
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Abilities"
-            android:textSize="18dp"
-            android:textColor="@android:color/black"
-            android:layout_marginEnd="8dp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/pokemonAbilities"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Blaze, Solar Power"
-            android:textColor="@android:color/black"
-            android:padding="10dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_background" />
+
+
     </LinearLayout>
 
-
-    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -134,15 +148,64 @@
             android:orientation="vertical"
             android:gravity="start"
            >
+
+            <!-- Types -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Types"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/pokemonTypes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:background="@drawable/rounded_background"
+                android:padding="10dp"
+                android:text="Fire, Flying"
+                android:textColor="@android:color/black" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1" />
+            <!-- Abilities -->
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Abilities"
+                android:textSize="18dp"
+                android:textColor="@android:color/black"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/pokemonAbilities"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Blaze, Solar Power"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"
+                android:padding="10dp"
+                android:background="@drawable/rounded_background"
+                android:layout_marginBottom="20dp"/>
+
         <!-- Section for Pokémon stats -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Stats"
-            android:layout_marginBottom="4dp"
             android:textColor="@android:color/black"
             android:gravity="start"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/pokemonStats"
@@ -161,6 +224,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="HP: 0%"
+            android:textSize="20dp"
             android:textColor="@android:color/black"
             android:layout_marginBottom="4dp" />
         <ProgressBar
@@ -178,6 +242,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Attack: 0%"
+            android:textSize="20dp"
             android:textColor="@android:color/black"
             android:layout_marginBottom="4dp" />
         <ProgressBar
@@ -194,6 +259,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Defense: 0%"
+            android:textSize="20dp"
             android:textColor="@android:color/black"
             android:layout_marginBottom="4dp" />
         <ProgressBar
@@ -210,6 +276,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Special Attack: 0%"
+            android:textSize="20dp"
             android:textColor="@android:color/black"
             android:layout_marginBottom="4dp" />
         <ProgressBar
@@ -226,6 +293,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Special Defense: 0%"
+            android:textSize="20dp"
             android:textColor="@android:color/black"
             android:layout_marginBottom="4dp" />
         <ProgressBar
@@ -242,6 +310,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Speed: 0%"
+            android:textSize="20dp"
             android:textColor="@android:color/black"
             android:layout_marginBottom="4dp" />
         <ProgressBar
