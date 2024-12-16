@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.collectioncard.R;
+import com.example.collectioncard.authentification.LoginActivity;
 
 public class ProfileFragment extends Fragment {
 
@@ -30,23 +31,29 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Liaison avec la vue fragment_profile.xml
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Initialisation des TextViews et ImageView
         txtEmail = rootView.findViewById(R.id.txtEmail);
-        txtPassword = rootView.findViewById(R.id.txtPassword); // Assurez-vous d'avoir ce TextView dans votre layout XML
+        txtPassword = rootView.findViewById(R.id.txtPassword);
         profileImage = rootView.findViewById(R.id.profileImage);
         Button btnChangeProfileImage = rootView.findViewById(R.id.btnChangeProfileImage);
+        Button buttonLogout = rootView.findViewById(R.id.button_logout);
 
-        // Récupération des SharedPreferences
         preferences = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
 
-        // Charger les données utilisateur et l'image
         fetchUserData();
 
-        // Listener pour changer l'image de profil
         btnChangeProfileImage.setOnClickListener(v -> openImageSelector());
+
+        buttonLogout.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
+
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            requireActivity().finish();
+        });
 
         return rootView;
     }
