@@ -1,8 +1,10 @@
 package com.example.collectioncard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,9 +13,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.collectioncard.authentification.LoginActivity;
 import com.example.collectioncard.databinding.ActivityMainBinding;
 import com.example.collectioncard.model.Pokemon;
 import com.example.collectioncard.model.PokemonDetails;
@@ -40,37 +42,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        // Initialiser Retrofit
+        Button buttonLogin = findViewById(R.id.button_login);
+        buttonLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        // Utilisation de View Binding
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        // Initialiser la liste de Pokémon
         pokemonList = new ArrayList<>();
 
-        // Configurer la RecyclerView
         RecyclerView recyclerView = binding.recyclerViewPokemons;
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
-        // Configurer l'adaptateur
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         pokemonAdapter = new PokemonAdapter(pokemonList, this);
         recyclerView.setAdapter(pokemonAdapter);
 
-        // Charger les données Pokémon depuis l'API
         fetchPokemonData(retrofit);
 
-        // Configurer le BottomNavigationView
         BottomNavigationView navView = binding.navView;
         navView.setItemIconTintList(null);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupWithNavController(navView, navController);
 
-        // Afficher ou cacher la barre de navigation selon la destination
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.navigation_home) {
                 navView.setVisibility(View.GONE);
@@ -78,30 +77,34 @@ public class MainActivity extends AppCompatActivity {
                 navView.setVisibility(View.VISIBLE);
             }
         });
+
+        // Check if we need to navigate to the DashboardFragment
+        if (getIntent().getBooleanExtra("navigateToDashboard", false)) {
+            navController.navigate(R.id.navigation_dashboard);
+        }
     }
 
     private void fetchPokemonData(Retrofit retrofit) {
         PokeApiService apiService = retrofit.create(PokeApiService.class);
         Call<PokemonResponse> call = apiService.getPokemons();
 
-        call.enqueue(new Callback<>() {
+        call.enqueue(new Callback<PokemonResponse>() {
             @Override
             public void onResponse(@NonNull Call<PokemonResponse> call, @NonNull Response<PokemonResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     pokemonList.addAll(response.body().getResults());
 
-                    // Charger les détails des Pokémon
                     for (Pokemon pokemon : pokemonList) {
                         fetchPokemonDetails(retrofit, pokemon);
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "Erreur lors du chargement des Pokémon", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(MainActivity.this, "Error loading Pokémon", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<PokemonResponse> call, @NonNull Throwable t) {
-                Toast.makeText(MainActivity.this, "Échec de la récupération des données", Toast.LENGTH_SHORT).show();
+              Toast.makeText(MainActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
                 Log.e("API_ERROR", Objects.requireNonNull(t.getMessage()));
             }
         });
@@ -111,21 +114,20 @@ public class MainActivity extends AppCompatActivity {
         PokeApiService apiService = retrofit.create(PokeApiService.class);
         Call<PokemonDetails> call = apiService.getPokemonDetails(pokemon.getUrl());
 
-        call.enqueue(new Callback<>() {
+        call.enqueue(new Callback<PokemonDetails>() {
             @Override
             public void onResponse(@NonNull Call<PokemonDetails> call, @NonNull Response<PokemonDetails> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PokemonDetails pokemonDetails = response.body();
                     pokemon.setImageUrl(pokemonDetails.getSprites().getFrontDefault());
 
-                    // Mettre à jour la RecyclerView
                     pokemonAdapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<PokemonDetails> call, @NonNull Throwable t) {
-                Log.e("API_ERROR", "Erreur lors du chargement des détails du Pokémon : " + t.getMessage());
+                Log.e("API_ERROR", "Error loading Pokémon details: " + t.getMessage());Log.e("API_ERROR", "Erreur lors du chargement des détails du Pokémon : " + t.getMessage());
             }
         });
     }

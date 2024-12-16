@@ -2,6 +2,7 @@ package com.example.collectioncard.ui.home;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,9 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.collectioncard.R;
+import com.example.collectioncard.authentification.LoginActivity;
 import com.example.collectioncard.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -31,11 +32,12 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         // Rendre toute la vue cliquable
-        View rootLayout = binding.rootLayout;;
+        View rootLayout = binding.rootLayout;
         rootLayout.setOnClickListener(v -> {
             // Action à effectuer lors du clic
-            Log.d(TAG, "La vue entière a été cliquée !");
-            NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.navigation_dashboard);
+            Log.d(TAG, "The entire view was clicked!");
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
         });
 
         // Code existant
