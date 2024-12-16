@@ -11,9 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-
         android:layout_marginEnd="8dp"
         android:textSize="24sp"
+        android:layout_marginBottom="20dp"
         android:textStyle="bold"
         android:gravity="center"
         android:textColor="@android:color/black"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:minHeight="48dp" />
+        android:minHeight="68dp" />
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -32,17 +32,22 @@
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"
-        android:minHeight="48dp" />
+        android:minHeight="68dp" />
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register" />
+        android:text="Register"
+        android:background="@drawable/rounded_background"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login" />
+        android:text="Login"
+        android:background="@drawable/rounded_background"/>
 </LinearLayout>

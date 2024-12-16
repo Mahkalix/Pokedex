@@ -15,7 +15,8 @@
         android:textStyle="bold"
         android:gravity="center"
         android:textColor="@android:color/black"
-        android:text="User Profile" />
+        android:text="User Profile"
+        android:layout_gravity="center"/>
     <ImageView
         android:id="@+id/profileImage"
         android:layout_width="210dp"
@@ -26,29 +27,33 @@
         android:src="@drawable/default_profile_image"
         android:contentDescription="@string/profile_image"
         android:scaleType="centerCrop"
-        android:background="@drawable/border_shadow"/>
+
+
+        />
     <Button
         android:id="@+id/btnChangeProfileImage"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Change Profile Image" />
+        android:text="Change Profile Image"
+        android:background="@drawable/rounded_background"
+        android:layout_marginBottom="20dp"/>
 
 
     <TextView
         android:id="@+id/lblEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:textColor="@android:color/black"
         android:textSize="18dp"
         android:text="Email :"
-        android:layout_marginBottom="10dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/txtEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="Unknown"
@@ -56,22 +61,25 @@
         android:textSize="20dp"
         android:background="@drawable/rounded_background"
         android:layout_marginTop="5dp"
-        android:padding="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/lblPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:textColor="@android:color/black"
         android:textSize="18dp"
         android:text="Password :"
-        android:layout_marginBottom="10dp"
-        android:textStyle="bold" />
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/txtPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="Unknown"
@@ -79,5 +87,6 @@
         android:textSize="20dp"
         android:background="@drawable/rounded_background"
         android:layout_marginTop="5dp"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:gravity="center"/>
 </LinearLayout>
