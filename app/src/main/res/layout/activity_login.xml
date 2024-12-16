@@ -17,7 +17,7 @@
         android:textStyle="bold"
         android:gravity="center"
         android:textColor="@android:color/black"
-        android:text="Authentification" />
+        android:text="Connexion" />
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Mot de passe"
+        android:hint="Password"
         android:inputType="textPassword"
         android:minHeight="48dp" />
 
@@ -38,11 +38,11 @@
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="S'inscrire" />
+        android:text="Register" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Se connecter" />
+        android:text="Login" />
 </LinearLayout>
