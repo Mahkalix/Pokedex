@@ -18,7 +18,7 @@
             android:name=".PokemonDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".authentification.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.CollectionCard">
             <intent-filter>
@@ -27,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

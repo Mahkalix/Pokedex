@@ -8,4 +8,5 @@
     <string name="subtile_home">Explore and find your favorite pokémon.</string>
     <string name="pokemon_image">Pokemon image</string>
     <string name="pokemon_image_description">La description de ce pokemon n\'est pas disponible\n</string>
+    <string name="profile_image" />
 </resources>
