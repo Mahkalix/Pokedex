@@ -81,13 +81,14 @@
         android:id="@+id/txtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded_background"
+        android:focusable="false"
         android:hint="Hidden"
         android:inputType="textPassword"
-        android:focusable="false"
-        android:background="@drawable/rounded_background"
-        android:textColor="@android:color/black"
-        android:textSize="20dp"
-        android:layout_marginTop="5dp"
+        android:minHeight="48dp"
         android:padding="10dp"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="20dp" />
 </LinearLayout>
