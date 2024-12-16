@@ -71,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("isLoggedIn", true);  // État connecté
         editor.putString("username", username); // Enregistrer l'username
-        editor.putString("email", username + "@example.com"); // Enregistrer l'email
         editor.putString("password", password); // Enregistrer le mot de passe
         editor.putString("profileImageUri", profileImageUri); // Sauvegarder l'URI de l'image du profil
         editor.apply();
