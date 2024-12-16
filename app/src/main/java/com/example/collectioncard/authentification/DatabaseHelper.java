@@ -14,12 +14,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "UserManager.db";
     private static final String TABLE_USER = "user";
-    private static final String COLUMN_USER_NAME = "user_name";
+    private static final String COLUMN_EMAIL = "user_name";
     private static final String COLUMN_USER_PASSWORD = "user_password";
 
     private static final String CREATE_USER_TABLE =
             "CREATE TABLE " + TABLE_USER + "("
-                    + COLUMN_USER_NAME + " TEXT PRIMARY KEY,"
+                    + COLUMN_EMAIL + " TEXT PRIMARY KEY,"
                     + COLUMN_USER_PASSWORD + " TEXT" + ")";
 
     private static final String DROP_USER_TABLE =
@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_USER_NAME, user.getUsername());
+        values.put(COLUMN_EMAIL, user.getEmail());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
 
         db.insert(TABLE_USER, null, values);
@@ -51,9 +51,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean checkUser(String username) {
-        String[] columns = {COLUMN_USER_NAME};
+        String[] columns = {COLUMN_EMAIL};
         SQLiteDatabase db = this.getReadableDatabase();
-        String selection = COLUMN_USER_NAME + " = ?";
+        String selection = COLUMN_EMAIL + " = ?";
         String[] selectionArgs = {username};
 
         Cursor cursor = db.query(
@@ -73,9 +73,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean checkUser(String username, String password) {
-        String[] columns = {COLUMN_USER_NAME};
+        String[] columns = {COLUMN_EMAIL};
         SQLiteDatabase db = this.getReadableDatabase();
-        String selection = COLUMN_USER_NAME + " = ? AND " + COLUMN_USER_PASSWORD + " = ?";
+        String selection = COLUMN_EMAIL + " = ? AND " + COLUMN_USER_PASSWORD + " = ?";
         String[] selectionArgs = {username, password};
 
         Cursor cursor = db.query(
