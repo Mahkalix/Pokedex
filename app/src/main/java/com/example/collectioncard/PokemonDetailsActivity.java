@@ -187,7 +187,7 @@ public class PokemonDetailsActivity extends AppCompatActivity {
             StringBuilder statsBuilder = new StringBuilder();
             for (PokemonDetails.Stat stat : details.getStats()) {
                 if (stat != null && stat.getStat() != null && stat.getStat().getName() != null) {
-                    
+
                     int baseStat = stat.getBaseStat();
                     int percentage = (baseStat * 100) / 255;
                     int percentageHp = percentage;

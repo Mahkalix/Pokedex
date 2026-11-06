@@ -69,8 +69,9 @@ public class ProfileFragment extends Fragment {
         txtPassword.setText("********");
 
         // Charger l'image depuis le chemin URI enregistré
-        if (profileImageUri != null) {
-            profileImage.setImageURI(Uri.parse(profileImageUri));
+        if (profileImageUri != null && profileImageUri.startsWith("content://")) {
+            try { profileImage.setImageURI(Uri.parse(profileImageUri)); }
+            catch (SecurityException e) { profileImage.setImageResource(R.drawable.default_profile_image); }
         } else {
             profileImage.setImageResource(R.drawable.default_profile_image); // Image par défaut
         }

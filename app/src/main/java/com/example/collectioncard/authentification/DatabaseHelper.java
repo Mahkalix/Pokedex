@@ -9,7 +9,11 @@ import com.example.collectioncard.model.User;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
-        super(context.getApplicationContext(), "UserManager.db", null, 2);
+        this(context, "UserManager.db");
+    }
+
+    DatabaseHelper(Context context, String name) {
+        super(context.getApplicationContext(), name, null, 2);
     }
 
     @Override public void onConfigure(SQLiteDatabase db) {
