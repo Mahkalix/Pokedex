@@ -1,44 +1,44 @@
 package com.example.collectioncard.model;
 
+import java.text.Normalizer;
+import java.util.Locale;
+
 public class Pokemon {
     private String name;
     private final String url;
-    private String imageUrl;
-    private int number;
 
-    // Constructor
     public Pokemon(String name, String url) {
-        setName(name);
+        this.name = name;
         this.url = url;
     }
 
-    // Getters and setters
     public String getName() {
-        return name;
+        if (name == null || name.isEmpty()) return "";
+        return name.substring(0, 1).toUpperCase(Locale.ROOT) + name.substring(1);
     }
 
-    public void setName(String name) {
-        this.name = capitalizeFirstLetter(name);
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    public void setName(String name) { this.name = name; }
+    public String getUrl() { return url; }
 
     public int getNumber() {
-        String[] urlParts = url.split("/");
-        return Integer.parseInt(urlParts[urlParts.length - 1]);
+        if (url == null) return -1;
+        String path = url.replaceAll("/+$", "");
+        try { return Integer.parseInt(path.substring(path.lastIndexOf('/') + 1)); }
+        catch (NumberFormatException e) { return -1; }
     }
 
-    // Helper method to capitalize the first letter
-    private String capitalizeFirstLetter(String name) {
-        if (name == null || name.isEmpty()) {
-            return name;
-        }
-        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+    public boolean matches(String query) {
+        String normalized = normalize(query);
+        if (normalized.isEmpty()) return true;
+        if (normalize(getName()).contains(normalized)) return true;
+        String number = normalized.startsWith("#") ? normalized.substring(1) : normalized;
+        if (!number.matches("[0-9]+")) return false;
+        try { return Integer.parseInt(number) == getNumber(); }
+        catch (NumberFormatException e) { return false; }
+    }
+
+    private static String normalize(String value) {
+        return Normalizer.normalize(value.trim(), Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "").toLowerCase(Locale.ROOT);
     }
 }

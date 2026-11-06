@@ -1,75 +1,94 @@
 package com.example.collectioncard.authentification;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.collectioncard.MainActivity;
 import com.example.collectioncard.R;
 import com.example.collectioncard.model.User;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LoginActivity extends AppCompatActivity {
+    private final ExecutorService worker = Executors.newSingleThreadExecutor();
+    private DatabaseHelper database;
 
-    private DatabaseHelper databaseHelper;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        databaseHelper = new DatabaseHelper(this);
-
-        btnRegisterListener();
-        btnLoginListener();
+        database = new DatabaseHelper(this);
+        getSharedPreferences("UserPrefs", MODE_PRIVATE).edit().remove("password").apply();
+        findViewById(R.id.registerButton).setOnClickListener(v -> authenticate(true));
+        findViewById(R.id.loginButton).setOnClickListener(v -> authenticate(false));
     }
 
-    private void btnRegisterListener() {
-        findViewById(R.id.registerButton).setOnClickListener(view -> {
-            String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString().trim();
-            String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString().trim();
-
-            if (!databaseHelper.checkUser(email)) {
-                User user = new User();
-                user.setEmail(email);
-                user.setPassword(password);
-
-                databaseHelper.addUser(user);
-                Toast.makeText(LoginActivity.this, "User created successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(LoginActivity.this, "User already exists", Toast.LENGTH_SHORT).show();
+    private void authenticate(boolean register) {
+        EditText emailField = findViewById(R.id.emailEditText);
+        EditText passwordField = findViewById(R.id.passwordEditText);
+        String email = emailField.getText().toString().trim();
+        String password = passwordField.getText().toString();
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailField.setError("Saisissez une adresse e-mail valide");
+            return;
+        }
+        if (password.isEmpty() || (register && password.length() < 8)) {
+            passwordField.setError(register ? "Utilisez au moins 8 caractères" : "Saisissez votre mot de passe");
+            return;
+        }
+        setBusy(true);
+        worker.execute(() -> {
+            try {
+                boolean success;
+                if (register) {
+                    User user = new User();
+                    user.setEmail(email);
+                    user.setPassword(password);
+                    success = database.addUser(user);
+                } else {
+                    success = database.checkUser(email, password);
+                }
+                runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    setBusy(false);
+                    passwordField.setText("");
+                    if (register) {
+                        toast(success ? "Compte créé. Vous pouvez vous connecter." : "Cette adresse possède déjà un compte.");
+                    } else if (success) {
+                        getSharedPreferences("UserPrefs", MODE_PRIVATE).edit()
+                                .putBoolean("isLoggedIn", true).putString("email", email).remove("password").apply();
+                        Intent intent = new Intent(this, MainActivity.class);
+                        intent.putExtra("navigateToDashboard", true);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        toast("Adresse e-mail ou mot de passe incorrect.");
+                    }
+                });
+            } catch (RuntimeException e) {
+                runOnUiThread(() -> {
+                    if (!isFinishing() && !isDestroyed()) {
+                        setBusy(false);
+                        toast("Impossible d’accéder au compte. Réessayez.");
+                    }
+                });
             }
         });
     }
 
-    private void btnLoginListener() {
-        findViewById(R.id.loginButton).setOnClickListener(view -> {
-            String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString().trim();
-            String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString().trim();
-
-            if (databaseHelper.checkUser(email, password)) {
-                saveUserSession(email, password, "default");
-
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("navigateToDashboard", true);
-                startActivity(intent);
-                Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(LoginActivity.this, "Email or password is incorrect, please try again", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void setBusy(boolean busy) {
+        findViewById(R.id.registerButton).setEnabled(!busy);
+        findViewById(R.id.loginButton).setEnabled(!busy);
     }
 
-    private void saveUserSession(String email, String password, String profileImageUri) {
-        SharedPreferences preferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("isLoggedIn", true);
-        editor.putString("email", email);
-        editor.putString("password", password);
-        editor.putString("profileImageUri", profileImageUri);
-        editor.apply();
+    private void toast(String message) { Toast.makeText(this, message, Toast.LENGTH_SHORT).show(); }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        worker.execute(() -> database.close());
+        worker.shutdown();
     }
 }

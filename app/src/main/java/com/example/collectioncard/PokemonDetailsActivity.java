@@ -23,6 +23,7 @@ import retrofit2.Response;
 public class PokemonDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "PokemonDetailsActivity";
+    private Call<PokemonDetails> detailsRequest;
     private TextView numberTextView;
     private TextView typesTextView;
     private TextView abilitiesTextView;
@@ -105,10 +106,12 @@ public class PokemonDetailsActivity extends AppCompatActivity {
 
         PokeApiService apiService = ApiClient.getRetrofitInstance().create(PokeApiService.class);
         Call<PokemonDetails> call = apiService.getPokemonDetails(pokemonUrl);
+        detailsRequest = call;
 
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<PokemonDetails> call, @NonNull Response<PokemonDetails> response) {
+                if (isFinishing() || isDestroyed()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     PokemonDetails details = response.body();
                     Log.d(TAG, "Pokemon details: " + details);
@@ -130,11 +133,13 @@ public class PokemonDetailsActivity extends AppCompatActivity {
                     updateUI(details);
                 } else {
                     Log.e(TAG, "API response unsuccessful: " + response.code());
+                    Toast.makeText(PokemonDetailsActivity.this, "Impossible de charger la fiche. Réessayez en la rouvrant.", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<PokemonDetails> call, @NonNull Throwable t) {
+                if (call.isCanceled() || isFinishing() || isDestroyed()) return;
                 Log.e(TAG, "API call failed: " + t.getMessage());
                 Toast.makeText(PokemonDetailsActivity.this, "Failed to load Pokémon details.", Toast.LENGTH_SHORT).show();
             }
@@ -182,15 +187,15 @@ public class PokemonDetailsActivity extends AppCompatActivity {
             StringBuilder statsBuilder = new StringBuilder();
             for (PokemonDetails.Stat stat : details.getStats()) {
                 if (stat != null && stat.getStat() != null && stat.getStat().getName() != null) {
-                    statsBuilder.append(stat.getStat().getName()).append(": ").append(stat.getBaseStat()).append("\n");
+                    
                     int baseStat = stat.getBaseStat();
                     int percentage = (baseStat * 100) / 255;
-                    int percentageHp = (baseStat * 100) / 250;
-                    int percentageAttack = (baseStat * 100) / 134;
-                    int percentageDefense = (baseStat * 100) / 180;
-                    int percentageSpeed = (baseStat * 100) / 140;
-                    int percentageSpecialAttack = (baseStat * 100) / 154;
-                    int percentageSpecialDefense = (baseStat * 100) / 105;
+                    int percentageHp = percentage;
+                    int percentageAttack = percentage;
+                    int percentageDefense = percentage;
+                    int percentageSpeed = percentage;
+                    int percentageSpecialAttack = percentage;
+                    int percentageSpecialDefense = percentage;
 
                     statsBuilder.append(stat.getStat().getName()).append(": ").append(baseStat).append(" (").append(percentage).append("%)").append("\n");
 
@@ -230,7 +235,8 @@ public class PokemonDetailsActivity extends AppCompatActivity {
 
     // Method to animate progress bars
     private void animateProgressBar(ProgressBar progressBar, int toValue) {
-        ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, toValue);
+        progressBar.setMax(100);
+        ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, Math.max(0, Math.min(100, toValue)));
         animation.setDuration(1000); // 1 second
         animation.start();
     }
@@ -259,4 +265,9 @@ public class PokemonDetailsActivity extends AppCompatActivity {
             default: return "❓"; // Default emoji for unknown types
         }
     }
+    @Override protected void onDestroy() {
+        if (detailsRequest != null) detailsRequest.cancel();
+        super.onDestroy();
+    }
+
 }
