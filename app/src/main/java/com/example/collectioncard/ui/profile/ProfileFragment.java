@@ -61,16 +61,17 @@ public class ProfileFragment extends Fragment {
     private void fetchUserData() {
         // Récupérer les valeurs depuis SharedPreferences
         String email = preferences.getString("email", "Non défini");  // Valeur par défaut si l'email n'est pas défini
-        String password = preferences.getString("password", "Non défini");
+        preferences.edit().remove("password").apply();
         String profileImageUri = preferences.getString("profileImageUri", null);
 
         // Mettre à jour les champs texte
         txtEmail.setText(!email.equals("Non défini") ? email : "Aucune donnée enregistrée");
-        txtPassword.setText(!password.equals("Non défini") ? "********" : "Aucun mot de passe");
+        txtPassword.setText("********");
 
         // Charger l'image depuis le chemin URI enregistré
-        if (profileImageUri != null) {
-            profileImage.setImageURI(Uri.parse(profileImageUri));
+        if (profileImageUri != null && profileImageUri.startsWith("content://")) {
+            try { profileImage.setImageURI(Uri.parse(profileImageUri)); }
+            catch (SecurityException e) { profileImage.setImageResource(R.drawable.default_profile_image); }
         } else {
             profileImage.setImageResource(R.drawable.default_profile_image); // Image par défaut
         }
@@ -78,7 +79,9 @@ public class ProfileFragment extends Fragment {
 
     private void openImageSelector() {
         // Intent pour ouvrir la galerie
-        Intent intent = new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
         intent.setType("image/*"); // Permet uniquement de choisir des images
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
@@ -90,7 +93,13 @@ public class ProfileFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImageUri = data.getData();
 
-            if (selectedImageUri != null) {
+            if (selectedImageUri != null && isAdded() && getView() != null) {
+                try {
+                    requireContext().getContentResolver().takePersistableUriPermission(selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                } catch (SecurityException e) {
+                    Toast.makeText(getContext(), "Impossible de conserver cette image. Choisissez un autre fichier.", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 // Mettre à jour l'image affichée
                 profileImage.setImageURI(selectedImageUri);
 

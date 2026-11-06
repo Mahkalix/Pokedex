@@ -30,7 +30,7 @@
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="Mot de passe"
         android:inputType="textPassword"
         android:minHeight="68dp" />
 
@@ -38,7 +38,7 @@
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="Créer un compte"
         android:background="@drawable/rounded_background"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
@@ -48,6 +48,6 @@
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="Se connecter"
         android:background="@drawable/rounded_background"/>
 </LinearLayout>
