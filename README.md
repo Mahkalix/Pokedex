@@ -1,5 +1,9 @@
 # Pokédex
 
+## Version web
+
+Une version navigateur est disponible dans [`web/`](web/README.md) : 151 Pokémon de Kanto, recherche en français et en anglais, filtres, fiches de statistiques et favoris locaux. Le dossier `web` est la racine à configurer sur Vercel (Vite, sortie `dist`). L’application Android reste dans `app/`.
+
 [pokedex.webm](https://github.com/user-attachments/assets/efe3b78c-2754-4de7-9bf2-dbd260519264)
 
 

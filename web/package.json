@@ -1,0 +1,1 @@
+{"name":"pokedex-web","private":true,"version":"1.0.0","type":"module","scripts":{"dev":"vite --host 127.0.0.1","build":"vite build","preview":"vite preview --host 127.0.0.1","data:refresh":"node scripts/fetch-data.mjs","test":"node --test"},"devDependencies":{"vite":"^7.2.2"}}
