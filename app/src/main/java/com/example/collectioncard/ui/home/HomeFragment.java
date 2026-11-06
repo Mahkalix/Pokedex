@@ -51,8 +51,7 @@ public class HomeFragment extends Fragment {
         Animation blinkAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
         button.startAnimation(blinkAnimation);
 
-        // Supprime le setOnClickListener du bouton si tout est cliquable
-        button.setOnClickListener(null);
+        button.setOnClickListener(v -> rootLayout.performClick());
 
         return root;
     }

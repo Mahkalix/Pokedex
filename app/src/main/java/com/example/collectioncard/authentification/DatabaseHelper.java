@@ -18,7 +18,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
-        db.execSQL("PRAGMA secure_delete=ON");
+        try (Cursor cursor = db.rawQuery("PRAGMA secure_delete=ON", null)) {
+            cursor.moveToFirst();
+        }
     }
 
     @Override public void onCreate(SQLiteDatabase db) {
